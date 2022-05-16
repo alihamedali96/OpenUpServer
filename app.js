@@ -100,6 +100,28 @@ function deleteAPost(post){
       console.log(err)
   }
 }
+
+app.get('/', (req, res) => { 
+    res.status(200).send('Welcome to our Open Up API!')
+  })
+
+app.get('/homepage', (req, res) => {
+  res.status(200).send(findTopPosts())
+})
+
+app.get('/allposts', (req, res) => {
+  res.status(200).send(getAllPosts())
+})
+
+app.get('/mypage', (req, res) => {
+  res.status(200).send(getMyPosts())
+})
+
+app.post('/mypage', (req, res) => {
+    const newPost = req.body
+    res.status(201).send(addNewPost(newPost))
+})
+
 //Delete own post, which deletes from both allPosts and myPosts
 app.delete('/mypage', (req, res) => {
   try {
@@ -119,27 +141,6 @@ app.delete('/mypage', (req, res) => {
   } catch (err) {
     res.status(404).send({ error: err.message })
   }
-})
-
-app.get('/', (req, res) => { 
-    res.send('Welcome to our Open Up API!')
-  })
-
-app.get('/homepage', (req, res) => {
-  res.send(findTopPosts())
-})
-
-app.get('/allposts', (req, res) => {
-  res.send(getAllPosts())
-})
-
-app.get('/mypage', (req, res) => {
-  res.send(getMyPosts())
-})
-
-app.post('/mypage', (req, res) => {
-    const newPost = req.body
-    res.send(addNewPost(newPost))
 })
 
 module.exports = app
