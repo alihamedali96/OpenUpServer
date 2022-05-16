@@ -41,11 +41,17 @@ function getMyPosts() {
 function addNewPost(newPost){
   try {
       allPosts.push(newPost)
+      myPosts.push(newPost)
       fs.writeFile('./allPosts.json', JSON.stringify(allPosts,null, 2),(err)=> {
           if(err){
               console.log(err);
           }
       })
+      fs.writeFile('./myPosts.json', JSON.stringify(myPosts,null, 2),(err)=> {
+        if(err){
+            console.log(err);
+        }
+    })
     } catch (err) {
       console.log(err)
   }
@@ -142,7 +148,7 @@ app.get('/mypage', (req, res) => {
   res.send(getMyPosts())
 })
 
-app.post('/allposts', (req, res) => {
+app.post('/mypage', (req, res) => {
     const newPost = req.body
     res.send(addNewPost(newPost))
 })
