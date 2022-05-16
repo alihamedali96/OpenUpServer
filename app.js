@@ -1,15 +1,16 @@
-const express = require('express');
-const cors = require('cors');
-const app = express();
-// const allPosts = require('./allPosts')
-// const myPosts = require('./myPosts')
+const express = require('express')
+const cors = require('cors')
+const app = express()
+app.use(express.json())
+app.use(cors())
+
 const fs = require('fs')
 
 
 function getAllPosts() {
     try {
-    const jsonString = fs.readFileSync('./allPost.json', 'utf-8')
-    const allPosts = JSON.parse(jsonString)
+    const allPostsString = fs.readFileSync('./allPosts.json', 'utf-8')
+    const allPosts = JSON.parse(allPostsString)
     return allPosts
   } catch (err) {
     console.log(err)
@@ -18,8 +19,8 @@ function getAllPosts() {
 
 function findTopPosts() {
   try {
-    const jsonString = fs.readFileSync('./allPost.json', 'utf-8')
-    const allPosts = JSON.parse(jsonString)
+    const allPostsString = fs.readFileSync('./allPosts.json', 'utf-8')
+    const allPosts = JSON.parse(allPostsString)
     let sortedPosts = allPosts.sort((a, b) => (a.interactions < b.interactions) ? 1 : -1)
     return sortedPosts.slice(0, 2)
   } catch (err) {
@@ -27,27 +28,18 @@ function findTopPosts() {
   }
 }
 
-
-
-
-// jsonReader('./allPosts.json', (err, data) => {
-//   if (err) {
-//     console.log(err)
-//   } else {
-//     console.log(data)
-//   }
-// })
-
-//update json
-
-
-
-app.use(express.json());
-app.use(cors()) ;
-
+function getMyPosts() {
+  try {
+  const myPostsString = fs.readFileSync('./myPosts.json', 'utf-8')
+  const myPosts = JSON.parse(myPostsString)
+  return myPosts
+} catch (err) {
+  console.log(err)
+}
+}
 
 app.get('/', (req, res) => { 
-    res.send('Welcome to our Open Up API!'); 
+    res.send('Welcome to our Open Up API!')
   })
 
 app.get('/homepage', (req, res) => {
@@ -58,9 +50,9 @@ app.get('/allposts', (req, res) => {
   res.send(getAllPosts())
 })
 
-app.get('/myjournal', (req, res) => {
-  res.send(myPosts)
+app.get('/mypage', (req, res) => {
+  res.send(getMyPosts())
 })
 
 
-  module.exports = app
+module.exports = app
