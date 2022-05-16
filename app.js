@@ -1,8 +1,12 @@
+
 const express = require('express')
 const cors = require('cors')
 const app = express()
 app.use(express.json())
 app.use(cors())
+
+
+
 
 const fs = require('fs')
 
@@ -68,6 +72,8 @@ app.get('/', (req, res) => {
     res.send('Welcome to our Open Up API!')
   })
 
+
+
 app.get('/homepage', (req, res) => {
   res.send(findTopPosts())
 })
@@ -82,4 +88,7 @@ app.get('/mypage', (req, res) => {
 
 //add post route instead?
 
-module.exports = app
+
+  module.exports = app
+
+
