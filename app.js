@@ -6,7 +6,7 @@ app.use(cors())
 
 const fs = require('fs')
 
-
+//get all posts from allPosts.json
 function getAllPosts() {
     try {
     const allPostsString = fs.readFileSync('./allPosts.json', 'utf-8')
@@ -16,7 +16,7 @@ function getAllPosts() {
     console.log(err)
   }
 }
-
+//find top 2 posts from allPosts.json
 function findTopPosts() {
   try {
     const allPostsString = fs.readFileSync('./allPosts.json', 'utf-8')
@@ -27,7 +27,7 @@ function findTopPosts() {
     console.log(err)
   }
 }
-
+//get posts from myPosts.json
 function getMyPosts() {
   try {
   const myPostsString = fs.readFileSync('./myPosts.json', 'utf-8')
@@ -37,6 +37,32 @@ function getMyPosts() {
   console.log(err)
 }
 }
+//Started working on how to add new post using method in https://heynode.com/tutorial/readwrite-json-files-nodejs/, but may need to be just a post method instead
+
+const newPost = {
+    time: "",
+    date: "",
+    title: "",
+    text: "",
+    image_url: "",
+    public: null,
+    interactions: 0,
+    comments: []
+}
+
+const newPostString = JSON.stringify(newPost, null, 2)
+// console.log(newPostString)
+
+function addNewPrivatePost() {
+  jsonReader('./myPosts.json', (err, data) => {
+    if (err) {
+      console.log(err)
+    } else {
+      //not sure what to add here as posting entire new object
+    }
+  })
+}
+
 
 app.get('/', (req, res) => { 
     res.send('Welcome to our Open Up API!')
@@ -54,5 +80,6 @@ app.get('/mypage', (req, res) => {
   res.send(getMyPosts())
 })
 
+//add post route instead?
 
 module.exports = app
