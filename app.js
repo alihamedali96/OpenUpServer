@@ -121,17 +121,6 @@ app.delete('/mypage', (req, res) => {
   }
 })
 
-const newPost = {
-    time: "",
-    date: "",
-    title: "",
-    text: "",
-    image_url: "",
-    public: null,
-    interactions: 0,
-    comments: []
-}
-
 app.get('/', (req, res) => { 
     res.send('Welcome to our Open Up API!')
   })
