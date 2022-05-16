@@ -114,4 +114,90 @@ app.post('/allposts', (req, res) => {
     res.send(addNewPost(newPost))
   })
 
+
+
+function deleteMyPost(post){
+  try {
+      const myPostsString = fs.readFileSync('./myPosts.json', 'utf-8')
+      const myPosts = JSON.parse(myPostsString)
+      const postTitle = post.title
+      const postIndex = myPosts.findIndex((element) => element.title === postTitle)
+      if(postIndex < 0 || postIndex > myPostsString.length) {
+        console.log('This post does not exist')
+      } else {
+        const filteredPostsArray = myPosts.filter(
+          (postElement) => postElement.title !== post.title
+        )
+        console.log(filteredPostsArray)
+        fs.writeFile('./myPosts.json', JSON.stringify(filteredPostsArray, null, 2), (err) => {
+          if (err) {
+            console.log(err)
+          }
+        })
+        return filteredPostsArray
+      }
+    } catch (err) {
+      console.log(err)
+  }
+}
+
+function deleteAPost(post){
+  try {
+      const allPostsString = fs.readFileSync('./allPosts.json', 'utf-8')
+      const allPosts = JSON.parse(allPostsString)
+      const postTitle = post.title
+      const postIndex = allPosts.findIndex((element) => element.title === postTitle)
+      if(postIndex < 0 || postIndex > allPostsString.length) {
+        console.log('This post does not exist')
+      } else {
+        const filteredPostsArray = allPosts.filter(
+          (postElement) => postElement.title !== post.title
+        )
+        console.log(filteredPostsArray)
+        fs.writeFile('./myPosts.json', JSON.stringify(filteredPostsArray, null, 2), (err) => {
+          if (err) {
+            console.log(err)
+          }
+        })
+        return filteredPostsArray
+      }
+    } catch (err) {
+      console.log(err)
+  }
+}
+
+app.delete('/mypage', (req, res) => {
+  try {
+    const postToBeDeleted = req.body
+
+    const filteredData = deleteMyPost(postToBeDeleted)
+
+    
+    if (!filteredData) {
+      throw new Error('this post does not exist')
+    } else {
+      res.status(200).send(filteredData)
+    }
+  } catch (err) {
+    res.status(404).send({ error: err.message })
+  }
+})
+
+app.delete('/allposts', (req, res) => {
+  try {
+    const postToBeDeleted = req.body
+
+    const filteredData = deleteAPost(postToBeDeleted)
+
+    
+    if (!filteredData) {
+      throw new Error('this post does not exist')
+    } else {
+      res.status(200).send(filteredData)
+    }
+  } catch (err) {
+    res.status(404).send({ error: err.message })
+  }
+})
+
   module.exports = app
