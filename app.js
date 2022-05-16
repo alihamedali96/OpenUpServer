@@ -115,5 +115,3 @@ app.post('/allposts', (req, res) => {
   })
 
   module.exports = app
-
-  let joke = '';
