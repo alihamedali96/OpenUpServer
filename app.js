@@ -5,7 +5,6 @@ const app = express()
 app.use(express.json())
 app.use(cors())
 const fs = require('fs')
-const { all } = require('express/lib/application')
 
 const allPostsString = fs.readFileSync('./allPosts.json', 'utf-8')
 const allPosts = JSON.parse(allPostsString)
