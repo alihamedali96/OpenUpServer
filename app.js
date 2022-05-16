@@ -127,15 +127,11 @@ app.delete('/mypage', (req, res) => {
   try {
     const postToBeDeleted = req.body
     const filteredMyData = deleteMyPost(postToBeDeleted)
-    if (!filteredMyData) {
+    const filteredAllData = deleteAPost(postToBeDeleted)
+    if (!filteredMyData || !filteredAllData) {
       throw new Error('this post does not exist')
     } else {
       res.status(200).send(filteredMyData)
-    }
-    const filteredAllData = deleteAPost(postToBeDeleted)
-    if (!filteredAllData) {
-      throw new Error('this post does not exist')
-    } else {
       res.status(200).send(filteredAllData)
     }
   } catch (err) {
