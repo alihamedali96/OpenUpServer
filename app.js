@@ -58,12 +58,12 @@ function addNewPost(newPost){
 //Delete a post from myPosts
 function deleteMyPost(post){
   try {
-      const postIndex = myPosts.findIndex((element) => element.title === post.title)
+      const postIndex = myPosts.findIndex((element) => element.id === post.id)
       if(postIndex === -1) {
         throw new Error('this post does not exist')
       } else {
         const filteredPosts = myPosts.filter(
-          (element) => element.title !== post.title
+          (element) => element.id !== post.id
         )
         fs.writeFile('./myPosts.json', JSON.stringify(filteredPosts, null, 2), (err) => {
           if (err) {
@@ -79,12 +79,12 @@ function deleteMyPost(post){
 //Delete a post from allPosts
 function deleteAPost(post){
   try {
-      const postIndex = allPosts.findIndex((element) => element.title === post.title)
+      const postIndex = allPosts.findIndex((element) => element.id === post.id)
       if(postIndex === -1) {
         throw new Error('this post does not exist')
       } else {
         const filteredPosts = allPosts.filter(
-          (element) => element.title !== post.title
+          (element) => element.id !== post.id
         )
         fs.writeFile('./allPosts.json', JSON.stringify(filteredPosts, null, 2), (err) => {
           if (err) {
