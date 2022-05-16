@@ -59,8 +59,7 @@ function addNewPost(newPost){
 //Delete a post from myPosts
 function deleteMyPost(post){
   try {
-      const postTitle = post.title
-      const postIndex = myPosts.findIndex((element) => element.title === postTitle)
+      const postIndex = myPosts.findIndex((element) => element.title === post.title)
       if(postIndex === -1) {
         throw new Error('this post does not exist')
       } else {
@@ -81,8 +80,7 @@ function deleteMyPost(post){
 //Delete a post from allPosts
 function deleteAPost(post){
   try {
-      const postTitle = post.title
-      const postIndex = allPosts.findIndex((element) => element.title === postTitle)
+      const postIndex = allPosts.findIndex((element) => element.title === post.title)
       if(postIndex === -1) {
         throw new Error('this post does not exist')
       } else {
