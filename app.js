@@ -43,6 +43,26 @@ function getMyPosts() {
 }
 //Started working on how to add new post using method in https://heynode.com/tutorial/readwrite-json-files-nodejs/, but may need to be just a post method instead
 
+function addNewPost(newPost){
+    try {
+        const allPostsString = fs.readFileSync('./allPosts.json', 'utf-8')
+        const allPosts = JSON.parse(allPostsString)
+        allPosts.push(newPost)
+    
+
+        fs.writeFile('./allPosts.json',JSON.stringify(allPosts ,null, 2),(err)=> {
+            if(err){
+                console.log(err);
+            }
+        })
+
+        
+
+      } catch (err) {
+        console.log(err)
+}
+}
+
 const newPost = {
     time: "",
     date: "",
@@ -53,6 +73,8 @@ const newPost = {
     interactions: 0,
     comments: []
 }
+
+
 
 const newPostString = JSON.stringify(newPost, null, 2)
 // console.log(newPostString)
@@ -86,9 +108,11 @@ app.get('/mypage', (req, res) => {
   res.send(getMyPosts())
 })
 
-//add post route instead?
+app.post('/allposts', (req, res) => {
+    const newPost = req.body
 
+    res.send(addNewPost(newPost))
+  })
 
   module.exports = app
-
 
