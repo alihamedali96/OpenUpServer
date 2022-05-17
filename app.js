@@ -36,7 +36,7 @@ function getMyPosts() {
     console.log(err)
   }
 }
-
+//
 function addNewPost(newPost){
   try {
       allPosts.unshift(newPost)
@@ -55,6 +55,25 @@ function addNewPost(newPost){
       console.log(err)
   }
 }
+
+//add new comment to post
+//for each?
+//find post in question
+//unshift comment to comments section
+//fs write 
+//find post in myposts
+//unshift comment to comments section
+//fs write
+// function addComment(post) {
+//   const postMyIndex = myPosts.findIndex((element) => element.id === post.id)
+//   const postAllIndex = allPosts.findIndex((element) => element.id === post.id)
+//   if(postIndex === -1) {
+//     throw new Error('this post does not exist')
+//   } else {
+
+// }
+
+
 //Delete a post from myPosts
 function deleteMyPost(post){
   try {
