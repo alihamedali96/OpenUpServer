@@ -39,8 +39,8 @@ function getMyPosts() {
 
 function addNewPost(newPost){
   try {
-      allPosts.push(newPost)
-      myPosts.push(newPost)
+      allPosts.unshift(newPost)
+      myPosts.unshift(newPost)
       fs.writeFile('./allPosts.json', JSON.stringify(allPosts,null, 2),(err)=> {
           if(err){
               console.log(err);
