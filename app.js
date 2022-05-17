@@ -28,6 +28,25 @@ function findTopPosts() {
     console.log(err)
   }
 }
+
+function findSearch(search) {
+    try {
+      const allPostsString = fs.readFileSync('./allPosts.json', 'utf-8')
+      const allPosts = JSON.parse(allPostsString)
+ 
+      const matches = allPosts.filter(element => {
+        return (
+            element.title.includes(search) ||
+            element.text.includes(search) 
+            ); 
+        }) 
+     
+        return matches;
+
+    } catch (err) {
+      console.log(err)
+    }
+  }
 //get posts from myPosts.json
 function getMyPosts() {
   try {
@@ -55,6 +74,7 @@ function addNewPost(newPost){
       console.log(err)
   }
 }
+
 
 //add new comment to post
 //for each?
@@ -113,6 +133,32 @@ function deleteAPost(post){
         return filteredPosts
       }
     } catch (err) {
+
+function addNewPost(newPost){
+    try {
+        const allPostsString = fs.readFileSync('./allPosts.json', 'utf-8')
+        const allPosts = JSON.parse(allPostsString)
+        allPosts.push(newPost)
+    
+
+        fs.writeFile('./allPosts.json',JSON.stringify(allPosts ,null, 2),(err)=> {
+            if(err){
+                console.log(err);
+            }
+        })
+
+        
+
+      } catch (err) {
+        console.log(err)
+}
+}
+
+
+
+function addNewPrivatePost() {
+  jsonReader('./myPosts.json', (err, data) => {
+    if (err) {
       console.log(err)
   }
 }
@@ -132,6 +178,7 @@ app.get('/allposts', (req, res) => {
 app.get('/mypage', (req, res) => {
   res.status(200).send(getMyPosts())
 })
+
 
 app.post('/mypage', (req, res) => {
     const newPost = req.body
@@ -154,5 +201,18 @@ app.delete('/mypage', (req, res) => {
     res.status(404).send({ error: err.message })
   }
 })
+
+app.post('/allposts', (req, res) => {
+    const newPost = req.body
+
+    res.send(addNewPost(newPost))
+  })
+
+  app.get('/search', (req, res) => {
+    const search = 'ipsum'
+
+    res.send(findSearch(search))
+  })
+
 
 module.exports = app
