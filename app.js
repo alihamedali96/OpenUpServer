@@ -2,6 +2,7 @@ const express = require('express')
 const cors = require('cors')
 const app = express()
 app.use(express.json())
+const req = require('express/lib/request')
 app.use(cors())
 const fs = require('fs')
 
@@ -9,6 +10,13 @@ const allPostsString = fs.readFileSync('./allPosts.json', 'utf-8')
 const allPosts = JSON.parse(allPostsString)
 const myPostsString = fs.readFileSync('./myPosts.json', 'utf-8')
 const myPosts = JSON.parse(myPostsString)
+
+
+const path = require('path');
+app.use(express.static(__dirname));
+
+const bodyParser = require('body-parser');  // needed to read posted data
+app.use(bodyParser.urlencoded({ extended: true }));
 
 //get all posts from allPosts.json
 function getAllPosts() {
@@ -162,6 +170,47 @@ app.get('/allposts', (req, res) => {
 app.get('/mypage', (req, res) => {
   res.status(200).send(getMyPosts())
 })
+
+
+app.post('/post-test', (req, res) => {
+    
+  class newPost{
+      // newPost constructor
+      constructor(time, date, title, text, image_url, isPublic, interactions){
+          this.time = time;
+          this.date = date;
+          this.title = title;
+          this.text = text;
+          this.image_url = image_url;
+          var isTrueSet = (isPublic === 'true'); // string to boolean
+          this.isPublic = isTrueSet;
+          this.interactions = parseInt(interactions);
+      };
+  };
+
+  let makeNewEntry = new newPost(req.body.time, req.body.date, req.body.title, req.body.text, req.body.image_url, req.body.isPublic, req.body.interactions);
+  // console.log(makeNewEntry);
+
+
+  const jsonData= require('./allPosts.json');
+  // console.log(typeof jsonData);
+  jsonData.push(makeNewEntry);
+
+  var makeNewJson = JSON.stringify(jsonData, null, "\t"); // makes pretty
+
+  var fs = require('fs');
+  fs.writeFile('myjsonfileTEST.json', makeNewJson, err => {  // to test file
+      if (err) {
+        console.error(err);
+      }
+    });
+
+  res.sendStatus(200);
+});
+
+
+
+
 
 app.post('/mypage', (req, res) => {
     const newPost = req.body
