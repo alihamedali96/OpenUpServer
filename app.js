@@ -1,4 +1,3 @@
-
 const express = require('express')
 const cors = require('cors')
 const app = express()
@@ -30,23 +29,19 @@ function findTopPosts() {
 }
 
 function findSearch(search) {
-    try {
-      const allPostsString = fs.readFileSync('./allPosts.json', 'utf-8')
-      const allPosts = JSON.parse(allPostsString)
- 
-      const matches = allPosts.filter(element => {
-        return (
-            element.title.includes(search) ||
-            element.text.includes(search) 
-            ); 
-        }) 
-     
-        return matches;
-
-    } catch (err) {
-      console.log(err)
-    }
+  try {
+    const matches = allPosts.filter(element => {
+      return (
+          element.title.includes(search) ||
+          element.text.includes(search) 
+          )
+      }) 
+      return matches
+  } catch (err) {
+    console.log(err)
   }
+}
+
 //get posts from myPosts.json
 function getMyPosts() {
   try {
@@ -55,9 +50,11 @@ function getMyPosts() {
     console.log(err)
   }
 }
-//
-function addNewPost(newPost){
+//add a new post, checking if set to public or private
+function addNewPost(newPost) {
   try {
+    const postPublic = newPost.isPublic
+    if(postPublic === true) {
       allPosts.unshift(newPost)
       myPosts.unshift(newPost)
       fs.writeFile('./allPosts.json', JSON.stringify(allPosts,null, 2),(err)=> {
@@ -70,30 +67,43 @@ function addNewPost(newPost){
             console.log(err);
         }
     })
-    } catch (err) {
-      console.log(err)
-  }
+    } if (postPublic === false) {
+      myPosts.unshift(newPost)
+      fs.writeFile('./myPosts.json', JSON.stringify(myPosts,null, 2),(err)=> {
+        if(err){
+            console.log(err);
+        }
+    })
+  }} catch (err) {
+    console.log(err)
 }
-
-
+}
 //add new comment to post
-//for each?
-//find post in question
-//unshift comment to comments section
-//fs write 
-//find post in myposts
-//unshift comment to comments section
-//fs write
-// function addComment(post) {
-//   const postMyIndex = myPosts.findIndex((element) => element.id === post.id)
-//   const postAllIndex = allPosts.findIndex((element) => element.id === post.id)
-//   if(postIndex === -1) {
-//     throw new Error('this post does not exist')
-//   } else {
-
-// }
-
-
+function addComment(post) {
+  try {
+    const postMyIndex = myPosts.findIndex((element) => element.id === post.id)
+  const postAllIndex = allPosts.findIndex((element) => element.id === post.id)
+  // console.log(postMyIndex)
+  // console.log(postAllIndex)
+  if(postMyIndex !== -1 && postAllIndex !== -1) {
+    const myPostsComments = myPosts[postMyIndex].comments
+    myPostsComments.unshift(post.comments)
+    console.log(myPostsComments)
+    fs.writeFile('./myPosts.json', JSON.stringify(myPosts,null, 2),(err)=> {
+      if(err){
+          console.log(err);
+      }
+  })
+  fs.writeFile('./allPosts.json', JSON.stringify(myPosts,null, 2),(err)=> {
+    if(err){
+        console.log(err);
+    }
+})
+  }}catch (err) {
+    console.log(err)
+}
+  
+}
 //Delete a post from myPosts
 function deleteMyPost(post){
   try {
@@ -133,36 +143,10 @@ function deleteAPost(post){
         return filteredPosts
       }
     } catch (err) {
-
-function addNewPost(newPost){
-    try {
-        const allPostsString = fs.readFileSync('./allPosts.json', 'utf-8')
-        const allPosts = JSON.parse(allPostsString)
-        allPosts.push(newPost)
-    
-
-        fs.writeFile('./allPosts.json',JSON.stringify(allPosts ,null, 2),(err)=> {
-            if(err){
-                console.log(err);
-            }
-        })
-
-        
-
-      } catch (err) {
-        console.log(err)
-}
-}
-
-
-
-function addNewPrivatePost() {
-  jsonReader('./myPosts.json', (err, data) => {
-    if (err) {
       console.log(err)
   }
 }
-
+//routes
 app.get('/', (req, res) => { 
     res.status(200).send('Welcome to our Open Up API!')
   })
@@ -178,7 +162,6 @@ app.get('/allposts', (req, res) => {
 app.get('/mypage', (req, res) => {
   res.status(200).send(getMyPosts())
 })
-
 
 app.post('/mypage', (req, res) => {
     const newPost = req.body
@@ -202,17 +185,22 @@ app.delete('/mypage', (req, res) => {
   }
 })
 
-app.post('/allposts', (req, res) => {
-    const newPost = req.body
+app.get('/search', (req, res) => {
+  const search = 'ipsum'
+  res.send(findSearch(search))
+})
 
-    res.send(addNewPost(newPost))
-  })
 
-  app.get('/search', (req, res) => {
-    const search = 'ipsum'
+app.patch('/homepage', (req, res) => {
+  const newComment = req.body
+  // const postToBeDeleted = req.body
+  res.send(addComment(newComment))
+})
 
-    res.send(findSearch(search))
-  })
-
+app.patch('/allposts', (req, res) => {
+  const newComment = req.body
+  // const postToBeDeleted = req.body
+  res.send(addComment(newComment))
+})
 
 module.exports = app
