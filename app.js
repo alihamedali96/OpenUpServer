@@ -4,17 +4,16 @@ const cors = require('cors')
 const app = express()
 app.use(express.json())
 app.use(cors())
-
-
-
-
 const fs = require('fs')
+
+const allPostsString = fs.readFileSync('./allPosts.json', 'utf-8')
+const allPosts = JSON.parse(allPostsString)
+const myPostsString = fs.readFileSync('./myPosts.json', 'utf-8')
+const myPosts = JSON.parse(myPostsString)
 
 //get all posts from allPosts.json
 function getAllPosts() {
     try {
-    const allPostsString = fs.readFileSync('./allPosts.json', 'utf-8')
-    const allPosts = JSON.parse(allPostsString)
     return allPosts
   } catch (err) {
     console.log(err)
@@ -23,8 +22,6 @@ function getAllPosts() {
 //find top 2 posts from allPosts.json
 function findTopPosts() {
   try {
-    const allPostsString = fs.readFileSync('./allPosts.json', 'utf-8')
-    const allPosts = JSON.parse(allPostsString)
     let sortedPosts = allPosts.sort((a, b) => (a.interactions < b.interactions) ? 1 : -1)
     return sortedPosts.slice(0, 2)
   } catch (err) {
@@ -53,14 +50,89 @@ function findSearch(search) {
 //get posts from myPosts.json
 function getMyPosts() {
   try {
-  const myPostsString = fs.readFileSync('./myPosts.json', 'utf-8')
-  const myPosts = JSON.parse(myPostsString)
-  return myPosts
-} catch (err) {
-  console.log(err)
+    return myPosts
+  } catch (err) {
+    console.log(err)
+  }
 }
+//
+function addNewPost(newPost){
+  try {
+      allPosts.unshift(newPost)
+      myPosts.unshift(newPost)
+      fs.writeFile('./allPosts.json', JSON.stringify(allPosts,null, 2),(err)=> {
+          if(err){
+              console.log(err);
+          }
+      })
+      fs.writeFile('./myPosts.json', JSON.stringify(myPosts,null, 2),(err)=> {
+        if(err){
+            console.log(err);
+        }
+    })
+    } catch (err) {
+      console.log(err)
+  }
 }
-//Started working on how to add new post using method in https://heynode.com/tutorial/readwrite-json-files-nodejs/, but may need to be just a post method instead
+
+
+//add new comment to post
+//for each?
+//find post in question
+//unshift comment to comments section
+//fs write 
+//find post in myposts
+//unshift comment to comments section
+//fs write
+// function addComment(post) {
+//   const postMyIndex = myPosts.findIndex((element) => element.id === post.id)
+//   const postAllIndex = allPosts.findIndex((element) => element.id === post.id)
+//   if(postIndex === -1) {
+//     throw new Error('this post does not exist')
+//   } else {
+
+// }
+
+
+//Delete a post from myPosts
+function deleteMyPost(post){
+  try {
+      const postIndex = myPosts.findIndex((element) => element.id === post.id)
+      if(postIndex === -1) {
+        throw new Error('this post does not exist')
+      } else {
+        const filteredPosts = myPosts.filter(
+          (element) => element.id !== post.id
+        )
+        fs.writeFile('./myPosts.json', JSON.stringify(filteredPosts, null, 2), (err) => {
+          if (err) {
+            console.log(err)
+          }
+        })
+        return filteredPosts
+      }
+    } catch (err) {
+      console.log(err)
+  }
+}
+//Delete a post from allPosts
+function deleteAPost(post){
+  try {
+      const postIndex = allPosts.findIndex((element) => element.id === post.id)
+      if(postIndex === -1) {
+        throw new Error('this post does not exist')
+      } else {
+        const filteredPosts = allPosts.filter(
+          (element) => element.id !== post.id
+        )
+        fs.writeFile('./allPosts.json', JSON.stringify(filteredPosts, null, 2), (err) => {
+          if (err) {
+            console.log(err)
+          }
+        })
+        return filteredPosts
+      }
+    } catch (err) {
 
 function addNewPost(newPost){
     try {
@@ -84,45 +156,50 @@ function addNewPost(newPost){
 
 
 
-const newPost = {
-    time: "",
-    date: "",
-    title: "",
-    text: "",
-    image_url: "",
-    public: null,
-    interactions: 0,
-    comments: []
-}
-
-
 function addNewPrivatePost() {
   jsonReader('./myPosts.json', (err, data) => {
     if (err) {
       console.log(err)
-    } else {
-      //not sure what to add here as posting entire new object
-    }
-  })
+  }
 }
 
-
 app.get('/', (req, res) => { 
-    res.send('Welcome to our Open Up API!')
+    res.status(200).send('Welcome to our Open Up API!')
   })
 
-
-
 app.get('/homepage', (req, res) => {
-  res.send(findTopPosts())
+  res.status(200).send(findTopPosts())
 })
 
 app.get('/allposts', (req, res) => {
-  res.send(getAllPosts())
+  res.status(200).send(getAllPosts())
 })
 
 app.get('/mypage', (req, res) => {
-  res.send(getMyPosts())
+  res.status(200).send(getMyPosts())
+})
+
+
+app.post('/mypage', (req, res) => {
+    const newPost = req.body
+    res.status(201).send(addNewPost(newPost))
+})
+
+//Delete own post, which deletes from both allPosts and myPosts
+app.delete('/mypage', (req, res) => {
+  try {
+    const postToBeDeleted = req.body
+    const filteredMyData = deleteMyPost(postToBeDeleted)
+    const filteredAllData = deleteAPost(postToBeDeleted)
+    if (!filteredMyData || !filteredAllData) {
+      throw new Error('this post does not exist')
+    } else {
+      res.status(200).send(filteredMyData)
+      res.status(200).send(filteredAllData)
+    }
+  } catch (err) {
+    res.status(404).send({ error: err.message })
+  }
 })
 
 app.post('/allposts', (req, res) => {
@@ -138,6 +215,4 @@ app.post('/allposts', (req, res) => {
   })
 
 
-
-  module.exports = app
-
+module.exports = app
