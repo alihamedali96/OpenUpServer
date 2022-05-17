@@ -31,6 +31,25 @@ function findTopPosts() {
     console.log(err)
   }
 }
+
+function findSearch(search) {
+    try {
+      const allPostsString = fs.readFileSync('./allPosts.json', 'utf-8')
+      const allPosts = JSON.parse(allPostsString)
+ 
+      const matches = allPosts.filter(element => {
+        return (
+            element.title.includes(search) ||
+            element.text.includes(search) 
+            ); 
+        }) 
+     
+        return matches;
+
+    } catch (err) {
+      console.log(err)
+    }
+  }
 //get posts from myPosts.json
 function getMyPosts() {
   try {
@@ -63,6 +82,8 @@ function addNewPost(newPost){
 }
 }
 
+
+
 const newPost = {
     time: "",
     date: "",
@@ -74,10 +95,6 @@ const newPost = {
     comments: []
 }
 
-
-
-const newPostString = JSON.stringify(newPost, null, 2)
-// console.log(newPostString)
 
 function addNewPrivatePost() {
   jsonReader('./myPosts.json', (err, data) => {
@@ -113,6 +130,14 @@ app.post('/allposts', (req, res) => {
 
     res.send(addNewPost(newPost))
   })
+
+  app.get('/search', (req, res) => {
+    const search = 'ipsum'
+
+    res.send(findSearch(search))
+  })
+
+
 
   module.exports = app
 
