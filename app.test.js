@@ -1,6 +1,7 @@
 const app = require("./app")
 const request = require ('supertest'); 
 const getAllPosts = require ("./app"); 
+const addNewPost = ("./app"); 
 
 
 describe ('api server endpoints',()=>{
@@ -88,6 +89,14 @@ describe ('api server endpoints',()=>{
              
                 expect(getAllPosts).toBeTruthy();
              }) 
+
+            //  test('getAllPosts function should return allposts', () => { 
+            //     const post={
+            //         id:100
+            //     }
+                
+            //     expect(addNewPost(post)).toBeTruthy();
+            //  }) 
 
 
             afterAll((done)=>{

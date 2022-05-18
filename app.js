@@ -186,10 +186,10 @@ app.delete('/mypage', (req, res) => {
   }
 })
 
-app.get('/search', (req, res) => {
-  const search = 'ipsum'
-  res.status(200).send(findSearch(search))
-})
+// app.get('/search', (req, res) => {
+//   const search = 'ipsum'
+//   res.status(200).send(findSearch(search))
+// })
 
 
 app.patch('/homepage', (req, res) => {
@@ -204,7 +204,35 @@ app.patch('/allposts', (req, res) => {
   res.send(addComment(newComment))
 })
 
+app.patch('/posts/:id', (req, res) => {
+ const postID= parseInt(req.params.id)
+
+ //const post = allPosts[postID - 1];
+ const post = allPosts.find(e => e.id === postID)
+ 
+ const postIndex = allPosts.indexOf(post)
+  console.log(postIndex);
+ console.log(post)
+ console.log(req.body.interactions)
+  newInteractions = req.body.interactions;
+  post.interactions = newInteractions;
+  //console.log(post);
+
+
+  allPosts[postIndex] = post
+
+
+ fs.writeFile('./allPosts.json', JSON.stringify(allPosts,null, 2),(err)=> {
+          if(err){
+              console.log(err);
+          }
+      })
+ 
+  res.send("Interactions Logged")
+})
+
 module.exports = 
 app,
 getAllPosts,
-findTopPosts;
+findTopPosts,
+addNewPost;
