@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<coverage generated="1652860347003" clover="3.2.0">
+  <project timestamp="1652860347003" name="All files">
+    <metrics statements="109" coveredstatements="68" conditionals="34" coveredconditionals="12" methods="32" coveredmethods="23" elements="175" coveredelements="103" complexity="0" loc="109" ncloc="109" packages="1" files="1" classes="1"/>
+    <file name="app.js" path="/Users/gharibaahmedsuleiman/Documents/Ali Work/OpenUpServer/app.js">
+      <metrics statements="109" coveredstatements="68" conditionals="34" coveredconditionals="12" methods="32" coveredmethods="23"/>
+      <line num="1" count="1" type="stmt"/>
+      <line num="2" count="1" type="stmt"/>
+      <line num="3" count="1" type="stmt"/>
+      <line num="4" count="1" type="stmt"/>
+      <line num="5" count="1" type="stmt"/>
+      <line num="6" count="1" type="stmt"/>
+      <line num="8" count="1" type="stmt"/>
+      <line num="9" count="1" type="stmt"/>
+      <line num="10" count="1" type="stmt"/>
+      <line num="11" count="1" type="stmt"/>
+      <line num="15" count="1" type="stmt"/>
+      <line num="16" count="1" type="stmt"/>
+      <line num="18" count="0" type="stmt"/>
+      <line num="23" count="1" type="stmt"/>
+      <line num="24" count="6" type="cond" truecount="2" falsecount="0"/>
+      <line num="25" count="1" type="stmt"/>
+      <line num="27" count="0" type="stmt"/>
+      <line num="32" count="1" type="stmt"/>
+      <line num="33" count="1" type="stmt"/>
+      <line num="34" count="5" type="stmt"/>
+      <line num="39" count="1" type="stmt"/>
+      <line num="41" count="0" type="stmt"/>
+      <line num="47" count="1" type="stmt"/>
+      <line num="48" count="1" type="stmt"/>
+      <line num="50" count="0" type="stmt"/>
+      <line num="55" count="1" type="stmt"/>
+      <line num="56" count="1" type="stmt"/>
+      <line num="57" count="1" type="cond" truecount="1" falsecount="1"/>
+      <line num="58" count="0" type="stmt"/>
+      <line num="59" count="0" type="stmt"/>
+      <line num="60" count="0" type="stmt"/>
+      <line num="61" count="0" type="cond" truecount="0" falsecount="2"/>
+      <line num="62" count="0" type="stmt"/>
+      <line num="65" count="0" type="stmt"/>
+      <line num="66" count="0" type="cond" truecount="0" falsecount="2"/>
+      <line num="67" count="0" type="stmt"/>
+      <line num="70" count="1" type="cond" truecount="1" falsecount="1"/>
+      <line num="71" count="0" type="stmt"/>
+      <line num="72" count="0" type="stmt"/>
+      <line num="73" count="0" type="cond" truecount="0" falsecount="2"/>
+      <line num="74" count="0" type="stmt"/>
+      <line num="78" count="0" type="stmt"/>
+      <line num="83" count="2" type="stmt"/>
+      <line num="84" count="10" type="stmt"/>
+      <line num="85" count="10" type="stmt"/>
+      <line num="88" count="2" type="cond" truecount="2" falsecount="2"/>
+      <line num="89" count="0" type="stmt"/>
+      <line num="90" count="0" type="stmt"/>
+      <line num="91" count="0" type="stmt"/>
+      <line num="92" count="0" type="stmt"/>
+      <line num="93" count="0" type="cond" truecount="0" falsecount="2"/>
+      <line num="94" count="0" type="stmt"/>
+      <line num="97" count="0" type="stmt"/>
+      <line num="98" count="0" type="cond" truecount="0" falsecount="2"/>
+      <line num="99" count="0" type="stmt"/>
+      <line num="103" count="0" type="stmt"/>
+      <line num="109" count="1" type="stmt"/>
+      <line num="110" count="5" type="stmt"/>
+      <line num="111" count="1" type="cond" truecount="1" falsecount="1"/>
+      <line num="112" count="1" type="stmt"/>
+      <line num="114" count="0" type="stmt"/>
+      <line num="115" count="0" type="stmt"/>
+      <line num="117" count="0" type="stmt"/>
+      <line num="118" count="0" type="cond" truecount="0" falsecount="2"/>
+      <line num="119" count="0" type="stmt"/>
+      <line num="122" count="0" type="stmt"/>
+      <line num="125" count="1" type="stmt"/>
+      <line num="130" count="1" type="stmt"/>
+      <line num="131" count="5" type="stmt"/>
+      <line num="132" count="1" type="cond" truecount="1" falsecount="1"/>
+      <line num="133" count="1" type="stmt"/>
+      <line num="135" count="0" type="stmt"/>
+      <line num="136" count="0" type="stmt"/>
+      <line num="138" count="0" type="stmt"/>
+      <line num="139" count="0" type="cond" truecount="0" falsecount="2"/>
+      <line num="140" count="0" type="stmt"/>
+      <line num="143" count="0" type="stmt"/>
+      <line num="146" count="1" type="stmt"/>
+      <line num="150" count="1" type="stmt"/>
+      <line num="151" count="1" type="stmt"/>
+      <line num="154" count="1" type="stmt"/>
+      <line num="155" count="1" type="stmt"/>
+      <line num="158" count="1" type="stmt"/>
+      <line num="159" count="1" type="stmt"/>
+      <line num="162" count="1" type="stmt"/>
+      <line num="163" count="1" type="stmt"/>
+      <line num="166" count="1" type="stmt"/>
+      <line num="167" count="1" type="stmt"/>
+      <line num="168" count="1" type="stmt"/>
+      <line num="172" count="1" type="stmt"/>
+      <line num="173" count="1" type="stmt"/>
+      <line num="174" count="1" type="stmt"/>
+      <line num="175" count="1" type="stmt"/>
+      <line num="176" count="1" type="stmt"/>
+      <line num="177" count="1" type="cond" truecount="2" falsecount="2"/>
+      <line num="178" count="1" type="stmt"/>
+      <line num="180" count="0" type="stmt"/>
+      <line num="181" count="0" type="stmt"/>
+      <line num="184" count="1" type="stmt"/>
+      <line num="188" count="1" type="stmt"/>
+      <line num="189" count="1" type="stmt"/>
+      <line num="190" count="1" type="stmt"/>
+      <line num="194" count="1" type="stmt"/>
+      <line num="195" count="1" type="stmt"/>
+      <line num="197" count="1" type="stmt"/>
+      <line num="200" count="1" type="stmt"/>
+      <line num="201" count="1" type="stmt"/>
+      <line num="203" count="1" type="stmt"/>
+      <line num="206" count="1" type="stmt"/>
+    </file>
+  </project>
+</coverage>
