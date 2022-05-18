@@ -187,7 +187,7 @@ app.delete('/mypage', (req, res) => {
 
 app.get('/search', (req, res) => {
   const search = 'ipsum'
-  res.send(findSearch(search))
+  res.status(200).send(findSearch(search))
 })
 
 
