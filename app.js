@@ -1,20 +1,18 @@
-
 const express = require('express')
 const cors = require('cors')
 const app = express()
 app.use(express.json())
 app.use(cors())
-
-
-
-
 const fs = require('fs')
+
+const allPostsString = fs.readFileSync('./allPosts.json', 'utf-8')
+const allPosts = JSON.parse(allPostsString)
+const myPostsString = fs.readFileSync('./myPosts.json', 'utf-8')
+const myPosts = JSON.parse(myPostsString)
 
 //get all posts from allPosts.json
 function getAllPosts() {
     try {
-    const allPostsString = fs.readFileSync('./allPosts.json', 'utf-8')
-    const allPosts = JSON.parse(allPostsString)
     return allPosts
   } catch (err) {
     console.log(err)
@@ -23,8 +21,6 @@ function getAllPosts() {
 //find top 2 posts from allPosts.json
 function findTopPosts() {
   try {
-    const allPostsString = fs.readFileSync('./allPosts.json', 'utf-8')
-    const allPosts = JSON.parse(allPostsString)
     let sortedPosts = allPosts.sort((a, b) => (a.interactions < b.interactions) ? 1 : -1)
     return sortedPosts.slice(0, 2)
   } catch (err) {
@@ -33,111 +29,178 @@ function findTopPosts() {
 }
 
 function findSearch(search) {
-    try {
-      const allPostsString = fs.readFileSync('./allPosts.json', 'utf-8')
-      const allPosts = JSON.parse(allPostsString)
- 
-      const matches = allPosts.filter(element => {
-        return (
-            element.title.includes(search) ||
-            element.text.includes(search) 
-            ); 
-        }) 
-     
-        return matches;
-
-    } catch (err) {
-      console.log(err)
-    }
+  try {
+    const matches = allPosts.filter(element => {
+      return (
+          element.title.includes(search) ||
+          element.text.includes(search) 
+          )
+      }) 
+      return matches
+  } catch (err) {
+    console.log(err)
   }
+}
+
 //get posts from myPosts.json
 function getMyPosts() {
   try {
-  const myPostsString = fs.readFileSync('./myPosts.json', 'utf-8')
-  const myPosts = JSON.parse(myPostsString)
-  return myPosts
-} catch (err) {
-  console.log(err)
+    return myPosts
+  } catch (err) {
+    console.log(err)
+  }
+}
+//add a new post, checking if set to public or private
+function addNewPost(newPost) {
+  try {
+    const postPublic = newPost.isPublic
+    if(postPublic === true) {
+      allPosts.unshift(newPost)
+      myPosts.unshift(newPost)
+      fs.writeFile('./allPosts.json', JSON.stringify(allPosts,null, 2),(err)=> {
+          if(err){
+              console.log(err);
+          }
+      })
+      fs.writeFile('./myPosts.json', JSON.stringify(myPosts,null, 2),(err)=> {
+        if(err){
+            console.log(err);
+        }
+    })
+    } if (postPublic === false) {
+      myPosts.unshift(newPost)
+      fs.writeFile('./myPosts.json', JSON.stringify(myPosts,null, 2),(err)=> {
+        if(err){
+            console.log(err);
+        }
+    })
+  }} catch (err) {
+    console.log(err)
 }
 }
-//Started working on how to add new post using method in https://heynode.com/tutorial/readwrite-json-files-nodejs/, but may need to be just a post method instead
-
-function addNewPost(newPost){
-    try {
-        const allPostsString = fs.readFileSync('./allPosts.json', 'utf-8')
-        const allPosts = JSON.parse(allPostsString)
-        allPosts.push(newPost)
-    
-
-        fs.writeFile('./allPosts.json',JSON.stringify(allPosts ,null, 2),(err)=> {
-            if(err){
-                console.log(err);
-            }
-        })
-
-        
-
-      } catch (err) {
-        console.log(err)
-}
-}
-
-
-
-const newPost = {
-    time: "",
-    date: "",
-    title: "",
-    text: "",
-    image_url: "",
-    public: null,
-    interactions: 0,
-    comments: []
-}
-
-
-function addNewPrivatePost() {
-  jsonReader('./myPosts.json', (err, data) => {
-    if (err) {
-      console.log(err)
-    } else {
-      //not sure what to add here as posting entire new object
+//add new comment to post
+function addComment(post) {
+  try {
+    const postMyIndex = myPosts.findIndex((element) => element.id === post.id)
+  const postAllIndex = allPosts.findIndex((element) => element.id === post.id)
+  // console.log(postMyIndex)
+  // console.log(postAllIndex)
+  if(postMyIndex !== -1 && postAllIndex !== -1) {
+    const myPostsComments = myPosts[postMyIndex].comments
+    myPostsComments.unshift(post.comments)
+    console.log(myPostsComments)
+    fs.writeFile('./myPosts.json', JSON.stringify(myPosts,null, 2),(err)=> {
+      if(err){
+          console.log(err);
+      }
+  })
+  fs.writeFile('./allPosts.json', JSON.stringify(myPosts,null, 2),(err)=> {
+    if(err){
+        console.log(err);
     }
-  })
+})
+  }}catch (err) {
+    console.log(err)
 }
-
-
+  
+}
+//Delete a post from myPosts
+function deleteMyPost(post){
+  try {
+      const postIndex = myPosts.findIndex((element) => element.id === post.id)
+      if(postIndex === -1) {
+        throw new Error('this post does not exist')
+      } else {
+        const filteredPosts = myPosts.filter(
+          (element) => element.id !== post.id
+        )
+        fs.writeFile('./myPosts.json', JSON.stringify(filteredPosts, null, 2), (err) => {
+          if (err) {
+            console.log(err)
+          }
+        })
+        return filteredPosts
+      }
+    } catch (err) {
+      console.log(err)
+  }
+}
+//Delete a post from allPosts
+function deleteAPost(post){
+  try {
+      const postIndex = allPosts.findIndex((element) => element.id === post.id)
+      if(postIndex === -1) {
+        throw new Error('this post does not exist')
+      } else {
+        const filteredPosts = allPosts.filter(
+          (element) => element.id !== post.id
+        )
+        fs.writeFile('./allPosts.json', JSON.stringify(filteredPosts, null, 2), (err) => {
+          if (err) {
+            console.log(err)
+          }
+        })
+        return filteredPosts
+      }
+    } catch (err) {
+      console.log(err)
+  }
+}
+//routes
 app.get('/', (req, res) => { 
-    res.send('Welcome to our Open Up API!')
+    res.status(200).send('Welcome to our Open Up API!')
   })
-
-
 
 app.get('/homepage', (req, res) => {
-  res.send(findTopPosts())
+  res.status(200).send(findTopPosts())
 })
 
 app.get('/allposts', (req, res) => {
-  res.send(getAllPosts())
+  res.status(200).send(getAllPosts())
 })
 
 app.get('/mypage', (req, res) => {
-  res.send(getMyPosts())
+  res.status(200).send(getMyPosts())
 })
 
-app.post('/allposts', (req, res) => {
+app.post('/mypage', (req, res) => {
     const newPost = req.body
+    res.status(201).send(addNewPost(newPost))
+})
 
-    res.send(addNewPost(newPost))
-  })
+//Delete own post, which deletes from both allPosts and myPosts
+app.delete('/mypage', (req, res) => {
+  try {
+    const postToBeDeleted = req.body
+    const filteredMyData = deleteMyPost(postToBeDeleted)
+    const filteredAllData = deleteAPost(postToBeDeleted)
+    if (!filteredMyData || !filteredAllData) {
+      throw new Error('this post does not exist')
+    } else {
+      res.status(200).send(filteredMyData)
+      res.status(200).send(filteredAllData)
+    }
+  } catch (err) {
+    res.status(404).send({ error: err.message })
+  }
+})
 
-  app.get('/search', (req, res) => {
-    const search = 'ipsum'
-
-    res.send(findSearch(search))
-  })
-
+app.get('/search', (req, res) => {
+  const search = 'ipsum'
+  res.send(findSearch(search))
+})
 
 
-  module.exports = app
+app.patch('/homepage', (req, res) => {
+  const newComment = req.body
+  // const postToBeDeleted = req.body
+  res.send(addComment(newComment))
+})
 
+app.patch('/allposts', (req, res) => {
+  const newComment = req.body
+  // const postToBeDeleted = req.body
+  res.send(addComment(newComment))
+})
+
+module.exports = app
