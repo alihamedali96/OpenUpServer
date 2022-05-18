@@ -53,6 +53,14 @@ function getMyPosts() {
 //add a new post, checking if set to public or private
 function addNewPost(newPost) {
   try {
+    newPost.id = Math.floor((Math.random() * 100000) + 1);
+    const postAllIndex = allPosts.findIndex((element) => element.id === newPost.id)
+    const postMyIndex = myPosts.findIndex((element) => element.id === newPost.id)
+    while(postAllIndex !== -1 || postMyIndex !== -1){
+      newPost.id = Math.floor((Math.random() * 100000) + 1)
+      postAllIndex = allPosts.findIndex((element) => element.id === newPost.id)
+      postMyIndex = myPosts.findIndex((element) => element.id === newPost.id)
+    }
     const postPublic = newPost.isPublic
     if(postPublic === true) {
       allPosts.unshift(newPost)
@@ -83,8 +91,6 @@ function addComment(post) {
   try {
     const postMyIndex = myPosts.findIndex((element) => element.id === post.id)
   const postAllIndex = allPosts.findIndex((element) => element.id === post.id)
-  // console.log(postMyIndex)
-  // console.log(postAllIndex)
   if(postMyIndex !== -1 && postAllIndex !== -1) {
     const myPostsComments = myPosts[postMyIndex].comments
     myPostsComments.unshift(post.comments)
@@ -185,10 +191,10 @@ app.delete('/mypage', (req, res) => {
   }
 })
 
-app.get('/search', (req, res) => {
-  const search = 'ipsum'
-  res.send(findSearch(search))
-})
+// app.get('/search', (req, res) => {
+//   const search = 'ipsum'
+//   res.send(findSearch(search))
+// })
 
 
 app.patch('/homepage', (req, res) => {
