@@ -191,10 +191,10 @@ app.delete('/mypage', (req, res) => {
   }
 })
 
-app.get('/search', (req, res) => {
-  const search = req.body.value
-  res.send(findSearch(search))
-})
+// app.get('/search', (req, res) => {
+//   const search = 'ipsum'
+//   res.send(findSearch(search))
+// })
 
 
 app.patch('/homepage', (req, res) => {
