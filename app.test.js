@@ -1,5 +1,6 @@
 const app = require("./app")
 const request = require ('supertest'); 
+const getAllPosts = require ("./app"); 
 
 
 describe ('api server endpoints',()=>{
@@ -82,7 +83,11 @@ describe ('api server endpoints',()=>{
                 })
             })
 
-         
+            test('getAllPosts function should return allposts', () => { 
+               
+             
+                expect(getAllPosts).toBeTruthy();
+             }) 
 
 
             afterAll((done)=>{

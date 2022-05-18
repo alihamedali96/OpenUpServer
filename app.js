@@ -18,6 +18,7 @@ function getAllPosts() {
     console.log(err)
   }
 }
+
 //find top 2 posts from allPosts.json
 function findTopPosts() {
   try {
@@ -203,4 +204,7 @@ app.patch('/allposts', (req, res) => {
   res.send(addComment(newComment))
 })
 
-module.exports = app
+module.exports = 
+app,
+getAllPosts,
+findTopPosts;
