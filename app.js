@@ -18,6 +18,7 @@ function getAllPosts() {
     console.log(err)
   }
 }
+
 //find top 2 posts from allPosts.json
 function findTopPosts() {
   try {
