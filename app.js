@@ -51,56 +51,126 @@ function getMyPosts() {
   }
 }
 //add a new post, checking if set to public or private
+// function addNewPost(newPost) {
+//   try {
+//     newPost.id = Math.floor((Math.random() * 100000) + 1);
+//     // console.log(newPost.id)
+//     const postAllIndex = allPosts.findIndex((element) => element.id === newPost.id)
+//     const postMyIndex = myPosts.findIndex((element) => element.id === newPost.id)
+//     // console.log(newPost.id)
+//     while(postAllIndex !== -1 || postMyIndex !== -1){
+//       newPost.id = Math.floor((Math.random() * 100000) + 1)
+//       postAllIndex = allPosts.findIndex((element) => element.id === newPost.id)
+//       postMyIndex = myPosts.findIndex((element) => element.id === newPost.id)
+//     }
+    
+//     const postPublic = newPost.isPublic
+//     if(postPublic === true) {
+//       allPosts.unshift(newPost)
+//       myPosts.unshift(newPost)
+//       console.log(allPosts)
+//       fs.writeFile('./allPosts.json', JSON.stringify(allPosts,null, 2),(err)=> {
+//           if(err){
+//               console.log(err);
+//           }
+//       })
+//       fs.writeFile('./myPosts.json', JSON.stringify(myPosts,null, 2),(err)=> {
+//         if(err){
+//             console.log(err);
+//         }
+//     })
+//     // console.log(myPosts)
+//     // return allPosts && myPosts
+//     } if (postPublic === false) {
+//       myPosts.unshift(newPost)
+//       fs.writeFile('./myPosts.json', JSON.stringify(myPosts,null, 2),(err)=> {
+//         if(err){
+//             console.log(err);
+//         }
+//     })
+//     // console.log(myPosts)
+//     // return myPosts
+//   } else {
+//       throw new Error('this post does not exist')
+//   }
+// }catch (err) {
+//     console.log(err)
+// }
+
 function addNewPost(newPost) {
   try {
     newPost.id = Math.floor((Math.random() * 100000) + 1);
-    const postAllIndex = allPosts.findIndex((element) => element.id === newPost.id)
-    const postMyIndex = myPosts.findIndex((element) => element.id === newPost.id)
-    while(postAllIndex !== -1 || postMyIndex !== -1){
+    // console.log(newPost.id)
+    const postIndex = allPosts.findIndex((element) => element.id === newPost.id)
+    // const postMyIndex = myPosts.findIndex((element) => element.id === newPost.id)
+    // console.log(newPost.id)
+    while(postIndex !== -1){
       newPost.id = Math.floor((Math.random() * 100000) + 1)
-      postAllIndex = allPosts.findIndex((element) => element.id === newPost.id)
-      postMyIndex = myPosts.findIndex((element) => element.id === newPost.id)
+      postIndex = allPosts.findIndex((element) => element.id === newPost.id)
     }
-    const postPublic = newPost.isPublic
-    if(postPublic === true) {
-      allPosts.unshift(newPost)
-      myPosts.unshift(newPost)
+      allPosts.push(newPost)
+      console.log(allPosts)
       fs.writeFile('./allPosts.json', JSON.stringify(allPosts,null, 2),(err)=> {
           if(err){
               console.log(err);
           }
       })
-      fs.writeFile('./myPosts.json', JSON.stringify(myPosts,null, 2),(err)=> {
-        if(err){
-            console.log(err);
-        }
-    })
-    } if (postPublic === false) {
-      myPosts.unshift(newPost)
-      fs.writeFile('./myPosts.json', JSON.stringify(myPosts,null, 2),(err)=> {
-        if(err){
-            console.log(err);
-        }
-    })
-  }} catch (err) {
+}catch (err) {
     console.log(err)
-}
-}
+}}
+
+
+
+
+
+
 //add new comment to post
+// function addComment(post) {
+//   try {
+//     const postMyIndex = myPosts.findIndex((element) => element.id === post.id)
+//     console.log(postMyIndex)
+//   const postAllIndex = allPosts.findIndex((element) => element.id === post.id)
+//   if(postMyIndex !== -1 && postAllIndex !== -1) {
+//     const myPostsComments = myPosts[postMyIndex].comments
+//     const allComments = allPosts[postAllIndex].comments
+//     console.log(myPostsComments)
+//     console.log(allComments)
+//     // myPostsComments.unshift(post.comments)
+//     fs.writeFile('./myPosts.json', JSON.stringify(myPosts,null, 2),(err)=> {
+//       if(err){
+//           console.log(err);
+//       }
+//   })
+//   fs.writeFile('./allPosts.json', JSON.stringify(allPosts,null, 2),(err)=> {
+//     if(err){
+//         console.log(err);
+//     }
+// })
+//   }}catch (err) {
+//     console.log(err)
+// }
+  
+// }
+
 function addComment(post) {
   try {
-    const postMyIndex = myPosts.findIndex((element) => element.id === post.id)
+    const postId = post.id
+    console.log(postId)
+    const postMyIndex = myPosts.findIndex((element) => element.id === postId)
+    console.log(postMyIndex)
   const postAllIndex = allPosts.findIndex((element) => element.id === post.id)
   if(postMyIndex !== -1 && postAllIndex !== -1) {
     const myPostsComments = myPosts[postMyIndex].comments
-    myPostsComments.unshift(post.comments)
+    const allComments = allPosts[postAllIndex].comments
     console.log(myPostsComments)
+    console.log(allComments)
+    // myPostsComments.unshift(post.comments)
     fs.writeFile('./myPosts.json', JSON.stringify(myPosts,null, 2),(err)=> {
       if(err){
           console.log(err);
       }
   })
-  fs.writeFile('./allPosts.json', JSON.stringify(myPosts,null, 2),(err)=> {
+  fs.writeFile('./allPosts.json', JSON.stringify(allPosts,null, 2),(err)=> {
     if(err){
         console.log(err);
     }
@@ -171,7 +241,10 @@ app.get('/mypage', (req, res) => {
 
 app.post('/mypage', (req, res) => {
     const newPost = req.body
-    res.status(201).send(addNewPost(newPost))
+    // res.status(201).
+    addNewPost(newPost)
+    res.send(newPost)
+    
 })
 
 //Delete own post, which deletes from both allPosts and myPosts
@@ -200,7 +273,8 @@ app.delete('/mypage', (req, res) => {
 app.patch('/homepage', (req, res) => {
   const newComment = req.body
   // const postToBeDeleted = req.body
-  res.send(addComment(newComment))
+  addComment(newComment)
+  res.send(allPosts)
 })
 
 app.patch('/allposts', (req, res) => {
@@ -208,5 +282,35 @@ app.patch('/allposts', (req, res) => {
   // const postToBeDeleted = req.body
   res.send(addComment(newComment))
 })
-
-module.exports = app
+app.patch('/posts/:id', (req, res) => {
+  const postID= parseInt(req.params.id)
+ 
+  //const post = allPosts[postID - 1];
+  const post = allPosts.find(e => e.id === postID)
+  
+  const postIndex = allPosts.indexOf(post)
+   console.log(postIndex);
+  console.log(post)
+  console.log(req.body.interactions)
+   newInteractions = req.body.interactions;
+   post.interactions = newInteractions;
+   //console.log(post);
+ 
+ 
+   allPosts[postIndex] = post
+ 
+ 
+  fs.writeFile('./allPosts.json', JSON.stringify(allPosts,null, 2),(err)=> {
+           if(err){
+               console.log(err);
+           }
+       })
+  
+   res.send("Interactions Logged")
+ })
+ 
+ module.exports = 
+ app,
+ getAllPosts,
+ findTopPosts,
+ addNewPost;
