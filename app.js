@@ -28,19 +28,7 @@ function findTopPosts() {
   }
 }
 
-function findSearch(search) {
-  try {
-    const matches = allPosts.filter(element => {
-      return (
-          element.title.includes(search) ||
-          element.text.includes(search) 
-          )
-      }) 
-      return matches
-  } catch (err) {
-    console.log(err)
-  }
-}
+
 
 //get posts from myPosts.json
 function getMyPosts() {
@@ -50,78 +38,56 @@ function getMyPosts() {
     console.log(err)
   }
 }
-//add a new post, checking if set to public or private
-// function addNewPost(newPost) {
-//   try {
-//     newPost.id = Math.floor((Math.random() * 100000) + 1);
-//     // console.log(newPost.id)
-//     const postAllIndex = allPosts.findIndex((element) => element.id === newPost.id)
-//     const postMyIndex = myPosts.findIndex((element) => element.id === newPost.id)
-//     // console.log(newPost.id)
-//     while(postAllIndex !== -1 || postMyIndex !== -1){
-//       newPost.id = Math.floor((Math.random() * 100000) + 1)
-//       postAllIndex = allPosts.findIndex((element) => element.id === newPost.id)
-//       postMyIndex = myPosts.findIndex((element) => element.id === newPost.id)
-//     }
-    
-//     const postPublic = newPost.isPublic
-//     if(postPublic === true) {
-//       allPosts.unshift(newPost)
-//       myPosts.unshift(newPost)
-//       console.log(allPosts)
-//       fs.writeFile('./allPosts.json', JSON.stringify(allPosts,null, 2),(err)=> {
-//           if(err){
-//               console.log(err);
-//           }
-//       })
-//       fs.writeFile('./myPosts.json', JSON.stringify(myPosts,null, 2),(err)=> {
-//         if(err){
-//             console.log(err);
-//         }
-//     })
-//     // console.log(myPosts)
-//     // return allPosts && myPosts
-//     } if (postPublic === false) {
-//       myPosts.unshift(newPost)
-//       fs.writeFile('./myPosts.json', JSON.stringify(myPosts,null, 2),(err)=> {
-//         if(err){
-//             console.log(err);
-//         }
-//     })
-//     // console.log(myPosts)
-//     // return myPosts
-//   } else {
-//       throw new Error('this post does not exist')
-//   }
-// }catch (err) {
-//     console.log(err)
-// }
 
-function addNewPost(newPost) {
+function addNewPublicPost(newPost) {
   try {
     newPost.id = Math.floor((Math.random() * 100000) + 1);
     // console.log(newPost.id)
-    const postIndex = allPosts.findIndex((element) => element.id === newPost.id)
-    // const postMyIndex = myPosts.findIndex((element) => element.id === newPost.id)
+    const myPostIndex = myPosts.findIndex((element) => element.id === newPost.id)
+    const allPostIndex = allPosts.findIndex((element) => element.id === newPost.id)
     // console.log(newPost.id)
-    while(postIndex !== -1){
+    while(myPostIndex !== -1 || allPostIndex !== -1){
       newPost.id = Math.floor((Math.random() * 100000) + 1)
-      postIndex = allPosts.findIndex((element) => element.id === newPost.id)
+      myPostIndex = myPosts.findIndex((element) => element.id === newPost.id)
+      allPostIndex = allPosts.findIndex((element) => element.id === newPost.id)
     }
       allPosts.push(newPost)
-      console.log(allPosts)
+      myPosts.push(newPost)
       fs.writeFile('./allPosts.json', JSON.stringify(allPosts,null, 2),(err)=> {
           if(err){
               console.log(err);
           }
       })
+      fs.writeFile('./myPosts.json', JSON.stringify(myPosts,null, 2),(err)=> {
+        if(err){
+            console.log(err);
+        }
+    })
 }catch (err) {
     console.log(err)
 }}
 
-
-
-
+function addNewPrivatePost(newPost) {
+  try {
+    newPost.id = Math.floor((Math.random() * 100000) + 1);
+    // console.log(newPost.id)
+    const myPostIndex = myPosts.findIndex((element) => element.id === newPost.id)
+    const allPostIndex = allPosts.findIndex((element) => element.id === newPost.id)
+    // console.log(newPost.id)
+    while(myPostIndex !== -1 || allPostIndex !== -1){
+      newPost.id = Math.floor((Math.random() * 100000) + 1)
+      myPostIndex = myPosts.findIndex((element) => element.id === newPost.id)
+      allPostIndex = allPosts.findIndex((element) => element.id === newPost.id)
+    }
+      myPosts.push(newPost)
+      fs.writeFile('./myPosts.json', JSON.stringify(myPosts,null, 2),(err)=> {
+        if(err){
+            console.log(err);
+        }
+    })
+}catch (err) {
+    console.log(err)
+}}
 
 
 //add new comment to post
@@ -240,11 +206,18 @@ app.get('/mypage', (req, res) => {
 })
 
 app.post('/mypage', (req, res) => {
+  try {
     const newPost = req.body
-    // res.status(201).
-    addNewPost(newPost)
-    res.send(newPost)
-    
+        console.log(newPost.isPublic)
+        if (newPost.isPublic === 'no'){
+          addNewPrivatePost(newPost)
+        }
+        if(newPost.isPublic === 'yes'){
+          addNewPublicPost(newPost)
+        }res.status(201).send(newPost)
+  }  catch (err) {
+    res.status(404).send({ error: err.message })
+  }
 })
 
 //Delete own post, which deletes from both allPosts and myPosts
@@ -309,8 +282,7 @@ app.patch('/posts/:id', (req, res) => {
    res.send("Interactions Logged")
  })
  
- module.exports = 
- app,
- getAllPosts,
- findTopPosts,
- addNewPost;
+ module.exports = app
+//  getAllPosts,
+//  findTopPosts,
+//  addNewPost;
