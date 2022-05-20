@@ -1,17 +1,12 @@
 [
   {
     "id": 2,
-    "time": "12:01:58",
-    "date": "12/01/2022",
-    "title": "All Blog 12",
-    "text": "Lorem  dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Donec qu",
+    "title": "My First Blog",
+    "text": ""
     "image_url": "",
     "isPublic": true,
-    "interactions": 18,
-    "comments": [
-      "comment1",
-      "comment2"
-    ]
+    "interactions": 0,
+    "comments": []
   },
   {
     "id": 1,
