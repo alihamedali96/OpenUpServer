@@ -123,12 +123,15 @@ function deleteMyPost(post){
       if(postIndex === -1) {
         throw new Error('this post does not exist')
       } else {
-        myPosts.splice(postIndex, 1)
-        fs.writeFile('./myPosts.json', JSON.stringify(myPosts, null, 2), (err) => {
+        const filteredPosts = myPosts.filter(
+          (element) => element.id !== post.id
+        )
+        fs.writeFile('./myPosts.json', JSON.stringify(filteredPosts, null, 2), (err) => {
           if (err) {
             console.log(err)
           }
         })
+        return filteredPosts
       }
     } catch (err) {
       console.log(err)
@@ -141,12 +144,15 @@ function deleteAPost(post){
       if(postIndex === -1) {
         throw new Error('this post does not exist')
       } else {
-        allPosts.splice(postIndex, 1)
-        fs.writeFile('./allPosts.json', JSON.stringify(allPosts, null, 2), (err) => {
+        const filteredPosts = allPosts.filter(
+          (element) => element.id !== post.id
+        )
+        fs.writeFile('./allPosts.json', JSON.stringify(filteredPosts, null, 2), (err) => {
           if (err) {
             console.log(err)
           }
         })
+        return filteredPosts
       }
     } catch (err) {
       console.log(err)
